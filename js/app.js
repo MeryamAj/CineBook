@@ -75,15 +75,75 @@ films.forEach(element => {
     filmcontainer.innerHTML +=
     `<article class="overflow-hidden rounded-2xl border border-red-400 bg-white shadow-xl ring-2 ring-red-100" data-film-id="${element.id}">
           <div class="relative"><img src="${element.affiche}" alt="Affiche de Mission Galaxie" class="aspect-[2/3] w-full object-cover"><span class="absolute bottom-3 right-3 rounded-full bg-white/95 px-3 py-1 text-xs font-extrabold shadow-lg">${element.prix}</span></div>
-          <div class="p-4"><p class="text-xs font-bold uppercase tracking-wider text-cine-red">${element.genre}</p> <h3 class="mt-1 text-lg font-black">${element.titre}</h3><p class="mt-2 text-sm text-slate-500">${parseInt(h)} h ${m} m</p><button type="button" class="mt-4 w-full rounded-xl bg-cine-red px-4 py-3 font-extrabold text-white" id = "buttooon">Sélectionné</button></div>
+          <div class="p-4"><p class="text-xs font-bold uppercase tracking-wider text-cine-red">${element.genre}</p> <h3 class="mt-1 text-lg font-black">${element.titre}</h3><p class="mt-2 text-sm text-slate-500">${parseInt(h)} h ${m} m</p><button data-clicked="0" type="button" class="mt-4 w-full rounded-xl bg-cine-red px-4 py-3 font-extrabold text-white"  data-film-id="${element.id}" >Choisie ce film</button></div>
         </article>`
+});
+       const buttones = document.querySelectorAll("button");
+       const list_films = [];
 
-        const buttone = document.querySelector("buttooon");
+buttones.forEach(button => {
+    button.addEventListener("click", function () {
+      console.log(button.classList=="bg-cine-red");
+      console.log(button);
+      console.log(button.dataset);
+      console.log(button.dataset.clicked);
+      
+      if(button.dataset.clicked == 0){
+
+        button.classList = "mt-4 w-full rounded-xl px-4 py-3 font-extrabold text-black border border-black"
+        button.innerHTML = "Sélectionné"
+        button.dataset.clicked = 1;
+
+      }
+    else{
+      button.classList = "mt-4 w-full rounded-xl bg-cine-red px-4 py-3 font-extrabold text-white"
+      button.innerHTML = "Choisie ce film"
+      button.dataset.clicked = 0;
+     
+      
+    }
+    
+
+        const findFilm = Number(button.dataset.filmId);
+
+        const film_object = films.find(film => film.id === findFilm);
+
+
+        if(list_films.includes(film_object))
+        {
+          return;
+        }
+        else
+        {
+          list_films.push(film_object);
+        }
+
+
+        const container= document.getElementById("reservation")
+let [h,m]=change_time(film_object.duree)
+container.innerHTML=`<section id="reservation" class="border-y border-slate-200 bg-slate-100/80">
+      <div class="mx-auto grid max-w-7xl gap-8 px-5 py-16 lg:grid-cols-[1fr_360px]">
+        <div class="space-y-8">
+          <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg sm:p-8" aria-labelledby="details-title" >
+            <p class="mb-1 text-[.7rem]
+            font-extrabold uppercase tracking-[.2em] text-cine-red">Étape 1</p><h2 id="details-title" class="text-2xl font-black tracking-tight sm:text-3xl">Votre film</h2>
+<div id="film-details" class="mt-6 grid gap-5 rounded-2xl bg-slate-50 p-5 sm:grid-cols-[100px_1fr]">
+              <img src="${film_object.affiche}" alt="Mission Galaxie" class="aspect-[2/3] w-24 rounded-xl object-cover shadow-md">
+              <div><div class="flex flex-wrap items-center gap-2"><h3 class="text-xl font-black">${film_object.titre}</h3><span class="rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">${film_object.prix}</span></div><p class="mt-2 text-sm font-semibold text-slate-500">${film_object.genre} · ${parseInt(h)} h ${m} min</p><p class="mt-3 leading-7 text-slate-600">Une exploratrice suit un signal inconnu jusqu’aux confins d’une galaxie oubliée.</p></div>
+            </div>
+            </section>
+            `
+    
+    });
+});
+
+        
+
 
 
 
     
-});
+
 
 
 
